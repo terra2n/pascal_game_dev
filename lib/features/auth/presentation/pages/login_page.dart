@@ -162,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
                            } else if (state is AuthSuccess) {
                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login Success")));
+                             context.go('/home');
                            }
                         },
                         builder: (context, state) {

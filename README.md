@@ -231,3 +231,31 @@ dart run build_runner build --delete-conflicting-outputs
 ## 📄 License
 
 Project ini dilisensikan di bawah MIT License.
+
+## 📋 Action Plan: Implementasi Fitur Auth (Login)
+
+Target: Menyelesaikan fitur Login dari layer Domain hingga UI dengan Clean Architecture + Bloc.
+
+### 🟢 Phase 1: Setup Foundation (Core)
+- [x] **Dependencies Setup**: `flutter_bloc`, `equatable`, `dio`, `get_it`, `go_router`, `google_fonts`, `freezed`, `json_serializable`.
+- [x] **Folder Structure**: Core & Features/Auth (Data, Domain, Presentation).
+- [x] **Theming & Assets**: Export images, Setup `app_colors.dart`, `app_theme.dart`.
+
+### 📦 Phase 2: Domain Layer (The Business Logic)
+- [x] **Entities**: `UserEntity`.
+- [x] **Repository Interface**: `AuthRepository`.
+- [x] **Use Cases**: `LoginUserUseCase`, `RegisterUserUseCase`, `ForgotPassword`, `VerifyEmail`.
+
+### 💾 Phase 3: Data Layer (The Implementation)
+- [x] **Models**: `UserModel`.
+- [x] **Data Sources**: `AuthRemoteDataSource`.
+- [x] **Repository Implementation**: `AuthRepositoryImpl`.
+
+### 🎨 Phase 4: Presentation Layer (The UI)
+- [x] **State Management**: `AuthBloc`.
+- [x] **Reusable Widgets**: `CustomTextField`, `PrimaryButton`.
+- [x] **Pages**: `WelcomePage`, `LoginPage`, `RegisterPage`, `ForgotPasswordPage`, `VerifyEmailPage`.
+
+### 🚀 Phase 5: Dependency Injection & Routing
+- [x] **Service Locator**: `injection_container.dart`.
+- [x] **Routing**: `app_router.dart`.

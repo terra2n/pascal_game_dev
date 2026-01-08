@@ -4,6 +4,7 @@ import '../features/auth/presentation/pages/welcome_page.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/auth/presentation/pages/verify_email_page.dart';
+import '../features/home/presentation/pages/main_page.dart';
 
 // Definisi URL routing aplikasi
 final appRouter = GoRouter(
@@ -28,6 +29,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/verify-email',
       builder: (context, state) => VerifyEmailPage(email: state.extra as String?),
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const MainPage(),
     ),
   ],
 );
