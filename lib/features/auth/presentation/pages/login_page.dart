@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                           const Spacer(),
                           GestureDetector(
                             onTap: () {
-                              // Forgot Password
+                              context.push('/forgot-password');
                             },
                             child: const Text(
                               "Forgot Password ?",

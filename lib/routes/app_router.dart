@@ -1,6 +1,9 @@
 import 'package:go_router/go_router.dart';
+import '../features/auth/presentation/pages/register_page.dart';
 import '../features/auth/presentation/pages/welcome_page.dart';
 import '../features/auth/presentation/pages/login_page.dart';
+import '../features/auth/presentation/pages/forgot_password_page.dart';
+import '../features/auth/presentation/pages/verify_email_page.dart';
 
 // Definisi URL routing aplikasi
 final appRouter = GoRouter(
@@ -14,11 +17,17 @@ final appRouter = GoRouter(
       path: '/login',
       builder: (context, state) => const LoginPage(),
     ),
-    // Todo: Buat halaman RegisterPage nanti
     GoRoute(
       path: '/register',
-      // Sementara arahkan ke Login dulu untuk testing navigasi
-      builder: (context, state) => const LoginPage(), 
+      builder: (context, state) => const RegisterPage(),
+    ),
+    GoRoute(
+      path: '/forgot-password',
+      builder: (context, state) => const ForgotPasswordPage(),
+    ),
+    GoRoute(
+      path: '/verify-email',
+      builder: (context, state) => const VerifyEmailPage(),
     ),
   ],
 );

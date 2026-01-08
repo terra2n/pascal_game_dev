@@ -7,6 +7,11 @@ class AuthField extends StatefulWidget {
   final bool isPassword;
   final TextEditingController controller;
   final IconData? icon;
+  final bool readOnly;
+  final VoidCallback? onTap;
+  final TextInputType? keyboardType;
+  final Widget? prefix;
+  final Widget? suffix;
 
   const AuthField({
     super.key,
@@ -15,6 +20,11 @@ class AuthField extends StatefulWidget {
     required this.controller,
     this.isPassword = false,
     this.icon,
+    this.readOnly = false,
+    this.onTap,
+    this.keyboardType,
+    this.prefix,
+    this.suffix,
   });
 
   @override
@@ -43,6 +53,9 @@ class _AuthFieldState extends State<AuthField> {
         TextFormField(
           controller: widget.controller,
           obscureText: widget.isPassword ? _isObscure : false,
+          readOnly: widget.readOnly,
+          onTap: widget.onTap,
+          keyboardType: widget.keyboardType,
           validator: (value) {
              if (value == null || value.isEmpty) {
                return '${widget.label} Required';
@@ -55,8 +68,8 @@ class _AuthFieldState extends State<AuthField> {
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             filled: true,
             fillColor: Colors.white,
-            prefixIcon: widget.icon != null ? Icon(widget.icon, color: Colors.grey) : null,
-             suffixIcon: widget.isPassword
+            prefixIcon: widget.prefix ?? (widget.icon != null ? Icon(widget.icon, color: Colors.grey) : null),
+            suffixIcon: widget.isPassword
                 ? IconButton(
                     icon: Icon(
                       _isObscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
@@ -68,7 +81,7 @@ class _AuthFieldState extends State<AuthField> {
                       });
                     },
                   )
-                : null,
+                : widget.suffix,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: Colors.grey.shade300),
