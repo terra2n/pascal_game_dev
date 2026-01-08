@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/primary_button.dart';
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
 import '../widgets/gradient_scaffold.dart';
 
 class VerifyEmailPage extends StatefulWidget {
-  const VerifyEmailPage({super.key});
+  final String? email;
+  const VerifyEmailPage({super.key, this.email});
 
   @override
   State<VerifyEmailPage> createState() => _VerifyEmailPageState();
@@ -130,21 +135,43 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                       const SizedBox(height: 32),
 
                       // Verify Button
-                      PrimaryButton(
-                        text: 'Verify',
-                        onPressed: () {
-                          // Todo: Implement Verify logic
-                          String code = _controllers.map((c) => c.text).join();
-                          if (code.length == 4) {
-                             ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(content: Text("Verifying Code: $code")),
-                             );
-                             // Navigate effectively
-                          } else {
+                      BlocConsumer<AuthBloc, AuthState>(
+                        listener: (context, state) {
+                          if (state is AuthFailure) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                               const SnackBar(content: Text("Please enter full 4 digit code"), backgroundColor: Colors.red),
-                             );
+                              SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+                            );
+                          } else if (state is AuthSuccess) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Email Verified Successfully")),
+                            );
+                            // Navigate to Dashboard or Login based on flow
+                            context.go('/login'); 
                           }
+                        },
+                        builder: (context, state) {
+                          return PrimaryButton(
+                            text: 'Verify',
+                            isLoading: state is AuthLoading,
+                            onPressed: () {
+                              String code = _controllers.map((c) => c.text).join();
+                              if (code.length == 4) {
+                                if (widget.email != null) {
+                                  context.read<AuthBloc>().add(
+                                    VerifyEmailRequested(email: widget.email!, code: code),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text("Email not found"), backgroundColor: Colors.red),
+                                  );
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Please enter full 4 digit code"), backgroundColor: Colors.red),
+                                );
+                              }
+                            },
+                          );
                         },
                       ),
                       
@@ -152,8 +179,11 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                       Center(
                         child: GestureDetector(
                            onTap: () {
-                             // Resend Code Logic
-                             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Code Resent")));
+                             if (widget.email != null) {
+                               // Reuse ForgotPasswordRequested to resend code as it triggers same behavior
+                               context.read<AuthBloc>().add(ForgotPasswordRequested(email: widget.email!));
+                               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Resending Code...")));
+                             }
                            },
                            child: const Text(
                              "Resend Code",

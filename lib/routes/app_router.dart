@@ -27,7 +27,7 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/verify-email',
-      builder: (context, state) => const VerifyEmailPage(),
+      builder: (context, state) => VerifyEmailPage(email: state.extra as String?),
     ),
   ],
 );

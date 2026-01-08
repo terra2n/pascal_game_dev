@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/primary_button.dart';
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
 import '../widgets/auth_field.dart';
 import '../widgets/gradient_scaffold.dart';
 
@@ -92,16 +96,32 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         const SizedBox(height: 32),
 
                         // Send Code Button
-                        PrimaryButton(
-                          text: 'Send Code',
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              // Todo: Implement Send Code logic
+                        BlocConsumer<AuthBloc, AuthState>(
+                          listener: (context, state) {
+                            if (state is AuthFailure) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Reset code sent (Simulated)")),
+                                SnackBar(content: Text(state.message), backgroundColor: Colors.red),
                               );
-                              context.push('/verify-email');
+                            } else if (state is AuthSuccess) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("Reset code sent")),
+                              );
+                              // Pass the email to the next page if needed, for now just navigate
+                              context.push('/verify-email', extra: _emailController.text);
                             }
+                          },
+                          builder: (context, state) {
+                            return PrimaryButton(
+                              text: 'Send Code',
+                              isLoading: state is AuthLoading,
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  context.read<AuthBloc>().add(
+                                    ForgotPasswordRequested(email: _emailController.text),
+                                  );
+                                }
+                              },
+                            );
                           },
                         ),
                       ],

@@ -7,13 +7,12 @@
 
 
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:pascal_game_dev/main.dart';
 
 void main() {
   testWidgets('Welcome Page smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const PascalGameDevApp());
+    await tester.pumpWidget(const MyApp());
 
     // Verify that Welcome Page is shown
     expect(find.text('Temukan Teman Mabar\n& Developer Game'), findsOneWidget);

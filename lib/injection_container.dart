@@ -6,6 +6,8 @@ import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/domain/usecases/login_user.dart';
 import 'features/auth/domain/usecases/register_user.dart';
+import 'features/auth/domain/usecases/forgot_password.dart';
+import 'features/auth/domain/usecases/verify_email.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 
 final sl = GetIt.instance; // sl singkatan dari Service Locator
@@ -19,12 +21,16 @@ Future<void> init() async {
     () => AuthBloc(
       loginUser: sl(),    // Otomatis mencari LoginUser yang sudah diregistrasi
       registerUser: sl(), // Otomatis mencari RegisterUser
+      forgotPassword: sl(),
+      verifyEmail: sl(),
     ),
   );
 
   // 2. Use Cases (Domain Logic)
   sl.registerLazySingleton(() => LoginUser(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));
+  sl.registerLazySingleton(() => ForgotPassword(sl()));
+  sl.registerLazySingleton(() => VerifyEmail(sl()));
 
   // 3. Repository (Domain Contract -> Data Implementation)
   sl.registerLazySingleton<AuthRepository>(
