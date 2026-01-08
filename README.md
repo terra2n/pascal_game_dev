@@ -8,7 +8,7 @@ Aplikasi ini dibangun menggunakan Flutter dengan pendekatan arsitektur yang scal
 
 ## ✨ Key Features
 
-- **User Authentication**: Login & Register aman untuk member komunitas.
+- **User Authentication**: Login, Register, Forgot Password, & Email Verification aman untuk member komunitas.
 - **Discussion Threads**: Membuat, membaca, dan membalas topik diskusi seputar Game Dev.
 - **Topic Filtering**: Kategorisasi diskusi berdasarkan topik (e.g., Unity, Unreal, Pixel Art, Audio).
 - **Developer Profile**: Halaman profil user untuk memamerkan skill dan proyek.
