@@ -20,11 +20,11 @@ Kami menggunakan standar industri terkini untuk menjaga codebase tetap bersih da
 
 - **Framework**: Flutter (Dart)
 - **Architecture**: Feature-First (Clean Architecture inspired)
-- **State Management**: Flutter Bloc / Riverpod (Pilih salah satu & sesuaikan)
+- **State Management**: Flutter Bloc (menggunakan library `flutter_bloc`)
 - **Networking**: Dio (dengan Interceptors & Error Handling)
 - **Routing**: GoRouter
 - **Code Generation**: Freezed & JSON Serializable
-- **Local Storage**: Hive / Shared Preferences
+- **Local Storage**: Hive
 
 ## ⚙️ Prerequisites
 
@@ -79,21 +79,35 @@ Struktur folder disusun berdasarkan Fitur (Feature-First) agar modular. Setiap f
 
 ```
 lib/
-├── core/                   # Komponen global (Styles, Constants, Shared Widgets, Error Handling)
-│   ├── theme/              # Konfigurasi warna dan font
-│   └── utils/              # Helper functions
+├── core/                       # 🟢 Shared code (bisa diakses semua fitur)
+│   ├── error/                  # Definisi Error/Failure (misal: ServerFailure, ConnectionFailure)
+│   ├── network/                # Konfigurasi Dio & Interceptor
+│   ├── usecases/               # Interface UseCase dasar
+│   ├── utils/                  # Helper (DateFormatter, Validator)
+│   ├── theme/                  # AppTheme, Colors, Typography
+│   └── widgets/                # Widget umum (CustomButton, CustomTextField, LoadingSpinner)
 │
-├── features/               # Fitur-fitur utama aplikasi
-│   ├── auth/               # Login, Register, Logout
-│   │   ├── data/           # API calls & Models
-│   │   ├── domain/         # Entities & Repositories interfaces
-│   │   └── presentation/   # Pages & State Management
+├── features/                   # 📦 Modules (Fitur-fitur aplikasi)
+│   ├── auth/                   # Contoh Fitur: Authentication
+│   │   ├── data/               # Layer Data (Akses ke API/DB)
+│   │   │   ├── datasources/    # RemoteDataSource (API) & LocalDataSource (Cache)
+│   │   │   ├── models/         # Model Data (JSON serialization / fromJson)
+│   │   │   └── repositories/   # Implementasi Repository (auth_repository_impl.dart)
+│   │   │
+│   │   ├── domain/             # Layer Domain (Aturan Bisnis Murni) - TIDAK BOLEH ADA FLUTTER CODE
+│   │   │   ├── entities/       # Objek murni yang dipakai UI (UserEntity)
+│   │   │   ├── repositories/   # Interface Repository (auth_repository.dart) - Kontrak
+│   │   │   └── usecases/       # Logika spesifik (login_user.dart, register_user.dart)
+│   │   │
+│   │   └── presentation/       # Layer Tampilan
+│   │       ├── bloc/           # State Management (auth_bloc.dart, auth_event.dart, auth_state.dart)
+│   │       ├── pages/          # Halaman Screens (login_page.dart)
+│   │       └── widgets/        # Widget khusus fitur ini (misal: login_form.dart)
 │   │
-│   ├── forum/              # List thread, create post, comments
-│   └── profile/            # User profile, settings
+│   └── forum/                  # Fitur lain (strukturnya sama persis: data, domain, presentation)
 │
-├── main.dart               # Entry point & Dependency Injection setup
-└── routes/                 # Konfigurasi navigasi (GoRouter)
+├── main.dart                   # Entry point
+└── injection_container.dart    # Setup Dependency Injection (Service Locator/GetIt)
 ```
 
 ## ⚡ Development Commands
@@ -137,6 +151,63 @@ refactor: clean up widget structure
 - Jelaskan apa yang diubah pada deskripsi PR.
 - Lampirkan screenshot jika ada perubahan tampilan UI.
 - Minta review dari minimal 1 maintainer sebelum merge.
+
+### 4. Aturan Menambah Modul (Fitur Baru)
+
+Saat Anda ingin membuat fitur baru (misalnya fitur "Notification"), ikuti aturan urutan pengerjaan ini agar dependency tetap bersih.
+
+**Langkah 1: Buat Folder Fitur**
+Buat folder `lib/features/notification/`. Di dalamnya buat 3 sub-folder wajib: `domain`, `data`, `presentation`.
+
+**Langkah 2: Kerjakan Layer DOMAIN dulu (The Core)**
+Ini aturan "Clean Architecture". Mulailah dari bisnis proses, bukan UI.
+
+- **Entities**: Buat `notification_entity.dart`. Ini objek polosan (bukan JSON).
+- **Repository Interface**: Buat `notification_repository.dart` (abstract class). Tentukan fitur ini bisa ngapain aja (misal: `getNotifications()`, `markAsRead()`).
+- **UseCases**: Buat file untuk setiap aksi, misal `get_notifications_usecase.dart`.
+
+Kenapa Domain dulu? Agar logika bisnis Anda matang sebelum memikirkan tampilan atau API.
+
+**Langkah 3: Kerjakan Layer DATA**
+Setelah kontrak (interface) di Domain jadi, barulah kita implementasikan.
+
+- **Models**: Buat `notification_model.dart` (turunan dari Entity). Tambahkan fungsi `fromJson` dan `toJson`.
+- **Data Sources**: Buat `notification_remote_data_source.dart`. Di sini panggil Dio (API Endpoint).
+- **Repository Implementation**: Buat `notification_repository_impl.dart`. Gabungkan Data Source dengan Repository Interface dari Domain.
+
+**Langkah 4: Kerjakan Layer PRESENTATION**
+Terakhir, buat UI-nya.
+
+- **Bloc**: Buat `notification_bloc.dart`. Panggil UseCase di sini.
+- **Pages**: Buat `notification_page.dart`. Gunakan `BlocBuilder` untuk merender UI berdasarkan state.
+
+### 5. Aturan Components (Widget)
+Seringkali developer bingung: "Widget ini taruh di core atau di features?"
+
+**Aturan Emas:**
+
+**Shared Widgets (`lib/core/widgets/`):**
+Jika widget itu generik, bodoh (tidak ada logika bisnis berat), dan dipakai di lebih dari satu fitur.
+*Contoh: PrimaryButton, CustomTextField, ErrorView, LoadingIndicator.*
+
+**Feature Widgets (`lib/features/auth/presentation/widgets/`):**
+Jika widget itu spesifik hanya untuk fitur tersebut.
+*Contoh: LoginForm (hanya ada di Auth), ThreadCard (hanya ada di Forum), ProfileHeader (hanya ada di Profile).*
+
+### 6. Dependency Rules (PENTING)
+Agar arsitektur tidak rusak, perhatikan arah panah import-nya:
+
+- ✅ **Domain** tidak boleh import apapun dari Data atau Presentation. (Domain harus bersih, murni Dart).
+- ✅ **Data** meng-import Domain (karena dia mengimplementasikan repository domain).
+- ✅ **Presentation** meng-import Domain (karena dia memanggil UseCase).
+- ✅ **Presentation TIDAK BOLEH** meng-import Data (UI tidak boleh akses API langsung, harus lewat Bloc -> UseCase).
+
+### 7. Summary Checklist untuk Tim Anda
+Saat Code Review, cek 3 hal ini:
+
+- [ ] Apakah fitur baru sudah punya folder data, domain, presentation?
+- [ ] Apakah file Entity (Domain) bersih dari kode JSON atau package Flutter UI?
+- [ ] Apakah UI (Page) memanggil Logic (Bloc), bukan memanggil API langsung?
 
 ## 🐛 Troubleshooting
 
