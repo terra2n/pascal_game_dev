@@ -4,17 +4,18 @@ import 'package:flutter/material.dart';
 class CategoryChips extends StatelessWidget {
   const CategoryChips({super.key});
 
+  static const _categories = ['New Topic', 'Popular', 'Trending', 'Unity', 'Unreal', 'Godot'];
+
   @override
   Widget build(BuildContext context) {
     // "All" removed, and list updated
-    final categories = ['New Topic', 'Popular', 'Trending', 'Unity', 'Unreal', 'Godot'];
     
     return SizedBox(
       height: 40,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 24), // Match page padding
-        itemCount: categories.length,
+        itemCount: _categories.length,
         separatorBuilder: (context, index) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
 
@@ -28,7 +29,7 @@ class CategoryChips extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                categories[index],
+                _categories[index],
                 style: const TextStyle(
                   color: Color(0xFF6B7599), // Specific Blue-Grey Text
                   fontWeight: FontWeight.w600,

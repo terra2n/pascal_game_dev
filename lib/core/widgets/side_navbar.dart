@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
+import '../constants/route_paths.dart';
 import '../theme/app_colors.dart';
 import 'side_nav_item.dart';
 
@@ -80,7 +81,7 @@ class SideNavbar extends StatelessWidget {
                // Logout Logic
                // context.read<AuthBloc>().add(LogoutRequested()); // If event existed
                // For now just navigate to Login
-               context.go('/login');
+               context.go(RoutePaths.login);
             },
           ),
         ],

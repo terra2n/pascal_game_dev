@@ -21,35 +21,44 @@ final sl = GetIt.instance; // sl singkatan dari Service Locator
 
 Future<void> init() async {
   // ! Features - Auth
-  
-  // 1. Bloc (Presentation Logic)
-  // Gunakan registerFactory agar setiap kali dipanggil dibuat baru (untuk state clean)
+  await _initAuth();
+
+  // ! Features - Forum
+  await _initForum();
+
+  // ! External
+  // sl.registerLazySingleton(() => Dio());
+}
+
+Future<void> _initAuth() async {
+  // 1. Bloc
   sl.registerFactory(
     () => AuthBloc(
-      loginUser: sl(),    // Otomatis mencari LoginUser yang sudah diregistrasi
-      registerUser: sl(), // Otomatis mencari RegisterUser
+      loginUser: sl(),
+      registerUser: sl(),
       forgotPassword: sl(),
       verifyEmail: sl(),
     ),
   );
 
-  // 2. Use Cases (Domain Logic)
+  // 2. Use Cases
   sl.registerLazySingleton(() => LoginUser(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));
   sl.registerLazySingleton(() => ForgotPassword(sl()));
   sl.registerLazySingleton(() => VerifyEmail(sl()));
 
-  // 3. Repository (Domain Contract -> Data Implementation)
+  // 3. Repository
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(remoteDataSource: sl()),
   );
 
-  // 4. Data Sources (Data Access)
+  // 4. Data Sources
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(),
   );
+}
 
-  // ! Features - Forum
+Future<void> _initForum() async {
   // 1. Bloc
   sl.registerFactory(
     () => ForumBloc(getThreads: sl()),
@@ -67,8 +76,4 @@ Future<void> init() async {
   sl.registerLazySingleton<ForumRemoteDataSource>(
     () => ForumRemoteDataSourceImpl(),
   );
-
-  // ! External
-  // Jika nanti pakai Dio atau SharedPreferences, registrasi di sini
-  // sl.registerLazySingleton(() => Dio());
 }

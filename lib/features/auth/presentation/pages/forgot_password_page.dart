@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/route_paths.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../bloc/auth_bloc.dart';
@@ -46,7 +47,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),
@@ -107,7 +108,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 const SnackBar(content: Text("Reset code sent")),
                               );
                               // Pass the email to the next page if needed, for now just navigate
-                              context.push('/verify-email', extra: _emailController.text);
+                              context.push(RoutePaths.verifyEmail, extra: _emailController.text);
                             }
                           },
                           builder: (context, state) {

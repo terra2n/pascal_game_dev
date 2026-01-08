@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/route_paths.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../bloc/auth_bloc.dart';
@@ -60,7 +61,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),
@@ -146,7 +147,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                               const SnackBar(content: Text("Email Verified Successfully")),
                             );
                             // Navigate to Dashboard or Login based on flow
-                            context.go('/login'); 
+                            context.go(RoutePaths.login); 
                           }
                         },
                         builder: (context, state) {

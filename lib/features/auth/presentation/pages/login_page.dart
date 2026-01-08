@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/constants/route_paths.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../bloc/auth_bloc.dart';
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 5),
                     ),
@@ -86,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(color: Colors.grey[600]),
                           ),
                           GestureDetector(
-                            onTap: () => context.push('/register'),
+                            onTap: () => context.push(RoutePaths.register),
                             child: const Text(
                               "Sign Up",
                               style: TextStyle(
@@ -141,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                           const Spacer(),
                           GestureDetector(
                             onTap: () {
-                              context.push('/forgot-password');
+                              context.push(RoutePaths.forgotPassword);
                             },
                             child: const Text(
                               "Forgot Password ?",
@@ -162,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
                            } else if (state is AuthSuccess) {
                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login Success")));
-                             context.go('/home');
+                             context.go(RoutePaths.home);
                            }
                         },
                         builder: (context, state) {
