@@ -19,7 +19,7 @@ class AppTheme {
       // Style Tombol
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.gradientEnd, // Menggunakan biru terang
+          backgroundColor: AppColors.primary, // Menggunakan biru terang
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
