@@ -1,51 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'app_colors.dart';
 
 class AppTheme {
-  // Warna Utama (Brand Color)
-  static const Color primaryColor = Color(0xFF6C63FF);
-  static const Color secondaryColor = Color(0xFF2A2D3E);
-  static const Color backgroundColor = Colors.white;
-
   static ThemeData get lightTheme {
     return ThemeData(
-      useMaterial3: true,
-      primaryColor: primaryColor,
-      scaffoldBackgroundColor: backgroundColor,
+      // Menggunakan Roboto sesuai standar Google
+      textTheme: GoogleFonts.robotoTextTheme(),
       
-      // Mengatur Font Default ke Poppins (atau font lain)
-      textTheme: GoogleFonts.poppinsTextTheme(),
+      // Warna dasar
+      primaryColor: AppColors.primary,
       
-      // Style Default ElevatedButton
+      // Catatan: Karena kita pakai Gradient Background, scaffoldBackgroundColor 
+      // biasanya transparan atau kita set default putih dulu, 
+      // nanti di Page kita bungkus dengan Container Gradient.
+      scaffoldBackgroundColor: Colors.white,
+
+      // Style Tombol
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: primaryColor,
+          backgroundColor: AppColors.gradientEnd, // Menggunakan biru terang
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          textStyle: GoogleFonts.roboto(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         ),
       ),
-
-      // Style Default Input Text
+      
+      // Style Input Field
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.grey[100],
+        fillColor: Colors.white.withOpacity(0.9), // Agak transparan agar menyatu
+        hintStyle: TextStyle(color: Colors.grey[600]),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: Colors.transparent),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: primaryColor, width: 2),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
     );
   }
 }
+
