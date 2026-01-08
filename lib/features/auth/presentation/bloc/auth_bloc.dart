@@ -12,22 +12,39 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.loginUser,
     required this.registerUser,
   }) : super(AuthInitial()) {
-    on<AuthLoginRequested>(_onLogin);
-    on<AuthRegisterRequested>(_onRegister);
+    on<LoginRequested>(_onLoginRequested);
+    on<RegisterRequested>(_onRegisterRequested);
   }
 
-  Future<void> _onLogin(AuthLoginRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onLoginRequested(
+    LoginRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthLoading());
-    final result = await loginUser(LoginParams(email: event.email, password: event.password));
+    
+    final result = await loginUser(LoginParams(
+      email: event.email,
+      password: event.password,
+    ));
+
     result.fold(
       (failure) => emit(AuthFailure(failure.message)),
       (user) => emit(AuthSuccess(user)),
     );
   }
 
-  Future<void> _onRegister(AuthRegisterRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onRegisterRequested(
+    RegisterRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthLoading());
-    final result = await registerUser(RegisterParams(username: event.username, email: event.email, password: event.password));
+
+    final result = await registerUser(RegisterParams(
+      username: event.username,
+      email: event.email,
+      password: event.password,
+    ));
+
     result.fold(
       (failure) => emit(AuthFailure(failure.message)),
       (user) => emit(AuthSuccess(user)),

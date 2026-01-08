@@ -1,5 +1,3 @@
-import 'package:dio/dio.dart';
-import '../../../../core/error/exceptions.dart';
 import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -8,48 +6,40 @@ abstract class AuthRemoteDataSource {
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final Dio dio;
-
-  // Dio should be configured with BaseUrl in dependency injection
-  AuthRemoteDataSourceImpl({required this.dio});
+  // Nanti kita inject Dio di sini kalau backend sudah siap
+  // final Dio dio; 
+  // AuthRemoteDataSourceImpl({required this.dio});
 
   @override
   Future<UserModel> login(String email, String password) async {
-    try {
-      final response = await dio.post(
-        '/auth/login',
-        data: {
-          'email': email,
-          'password': password,
-        },
+    // Simulasi loading 2 detik
+    await Future.delayed(const Duration(seconds: 2));
+
+    // Simulasi Login Sukses (Hardcoded)
+    if (email == 'test@email.com' && password == 'password') {
+      return const UserModel(
+        id: '12345',
+        email: 'test@email.com',
+        username: 'PascalDev',
+        token: 'mock_jwt_token_abc123',
       );
-      
-      // Assuming response.data is the JSON map of the user
-      // Adjust based on actual API response structure (e.g. response.data['data'])
-      return UserModel.fromJson(response.data);
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? 'Unknown Server Error');
-    } catch (e) {
-      throw ServerException(e.toString());
+    } else {
+      // Simulasi Error
+      throw Exception('Email atau password salah');
     }
   }
 
   @override
   Future<UserModel> register(String username, String email, String password) async {
-    try {
-      final response = await dio.post(
-        '/auth/register',
-        data: {
-          'username': username,
-          'email': email,
-          'password': password,
-        },
-      );
-      return UserModel.fromJson(response.data);
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? 'Unknown Server Error');
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
+    await Future.delayed(const Duration(seconds: 2));
+    
+    return UserModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      email: email,
+      username: username,
+      token: 'mock_jwt_token_register_123',
+    );
   }
 }
+
+
