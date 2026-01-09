@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
         children: [
           // 1. Blue Background Base (Header Lebar)
           Container(
-            height: 300, // Fixed height for visual consistency
+            height: 422, // Expanded header height
             width: double.infinity,
             color: AppColors.homeBackground,
           ),
@@ -34,15 +34,32 @@ class HomePage extends StatelessWidget {
           Positioned(
             top: 0,
             right: 0,
-            child: Container(
-              width: 120, // Adjusted width
-              height: 120, // Adjusted height
-              decoration: const BoxDecoration(
-                color: AppColors.accentYellow,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50), 
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                // Yellow Layer (Background)
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: const BoxDecoration(
+                    color: AppColors.accentYellow,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(50),
+                    ),
+                  ),
                 ),
-              ),
+                // Blue Layer (Overlay to create border effect)
+                Container(
+                  width: 105,
+                  height: 105,
+                  decoration: const BoxDecoration(
+                    color: AppColors.homeBackground,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(45),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
 
@@ -80,26 +97,29 @@ class HomePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Hi, Janokk', 
-                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Hi, Janokk', 
+                                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 8), // Adjusted spacing
-                              Text(
-                                'Find topics that you like to read', 
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.8),
-                                  fontSize: 14,
+                                const SizedBox(height: 8), // Adjusted spacing
+                                Text(
+                                  'Find topics that you like to read', 
+                                  style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.8),
+                                    fontSize: 14,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          const SizedBox(width: 16),
                           // Ikon Search
                           const Icon(Icons.search_rounded, color: Colors.white, size: 28),
                         ],

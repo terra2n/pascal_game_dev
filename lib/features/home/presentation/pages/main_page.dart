@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../../core/widgets/app_bottom_nav.dart';
 import '../../../../core/widgets/side_navbar.dart';
 import 'home_page.dart';
+import '../../../../features/inspirasi/presentation/pages/inspirasi_page.dart';
+import '../../../../features/create_content/presentation/pages/create_content_page.dart';
+import '../../../../features/tutorial/presentation/pages/tutorial_page.dart';
+import '../../../../features/forum/presentation/pages/forum_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -18,10 +22,10 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const Center(child: Text('Explore Page')), // Index 1
-    const Center(child: Text('Create Page')), // Index 2 (Add)
-    const Center(child: Text('Library Page')), // Index 3
-    const Center(child: Text('Profile Page')), // Index 4
+    const InspirasiPage(),
+    const CreateContentPage(),
+    const TutorialPage(),
+    const ForumPage(),
   ];
 
   void _onBottomNavTapped(int index) {

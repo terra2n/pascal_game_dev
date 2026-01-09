@@ -118,6 +118,13 @@ dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
 
+### 6. Test Credentials (Uji Coba)
+
+Gunakan akun berikut untuk masuk ke dalam aplikasi tanpa registrasi (Mock Data):
+
+* **Email**: `test@email.com`
+* **Password**: `password`
+
 ---
 
 ## 🤝 Development Workflow & SOP

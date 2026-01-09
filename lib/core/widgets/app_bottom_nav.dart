@@ -29,7 +29,7 @@ class AppBottomNav extends StatelessWidget {
         onTap: onTap,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: AppColors.primary,
+        selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey[400],
         showSelectedLabels: false,
         showUnselectedLabels: false,
@@ -41,19 +41,24 @@ class AppBottomNav extends StatelessWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search_rounded),
-            activeIcon: Icon(Icons.search_rounded, weight: 600), // Thicker if possible or same
-            label: 'Search',
+            icon: Icon(Icons.lightbulb_outline), // Inspirasi (Lampu)
+            activeIcon: Icon(Icons.lightbulb),
+            label: 'Inspirasi',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_outlined),
-            activeIcon: Icon(Icons.notifications_rounded),
-            label: 'Notification',
+            icon: Icon(Icons.add_box_outlined), // Tambah Konten (Gambar Tambah)
+            activeIcon: Icon(Icons.add_box),
+            label: 'Tambah',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline_rounded),
-            activeIcon: Icon(Icons.person_rounded),
-            label: 'Profile',
+            icon: Icon(Icons.menu_book_outlined), // Tutorial (Buku)
+            activeIcon: Icon(Icons.menu_book),
+            label: 'Tutorial',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline), // Forum (Gambar Orang)
+            activeIcon: Icon(Icons.person),
+            label: 'Forum',
           ),
         ],
       ),
