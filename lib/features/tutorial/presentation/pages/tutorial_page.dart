@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../injection_container.dart';
-import '../../../../core/usecases/usecase.dart';
-import '../../domain/usecases/get_tutorials.dart';
+
 import '../bloc/tutorial_bloc.dart';
 import '../bloc/tutorial_event.dart';
 import '../bloc/tutorial_state.dart';

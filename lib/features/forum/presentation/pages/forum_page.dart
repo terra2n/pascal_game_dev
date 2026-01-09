@@ -71,7 +71,7 @@ class ForumPage extends StatelessWidget {
                                 Text(
                                   'Temukan solusi dan berbagi ilmu',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.8),
+                                    color: Colors.white.withValues(alpha: 0.8),
                                     fontSize: 14,
                                   ),
                                 ),
@@ -81,7 +81,7 @@ class ForumPage extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.1),
+                                color: Colors.white.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Icon(Icons.search_rounded, color: Colors.white, size: 24),
