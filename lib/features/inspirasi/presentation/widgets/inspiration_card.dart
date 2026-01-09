@@ -15,10 +15,12 @@ class InspirationCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey[200], // Placeholder color
         borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/placeholder_1.png'), // Fallback/Test Asset
-          fit: BoxFit.cover,
-        ),
+        image: inspiration.imageAsset.isNotEmpty
+            ? DecorationImage(
+                image: AssetImage(inspiration.imageAsset),
+                fit: BoxFit.cover,
+              )
+            : null,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),

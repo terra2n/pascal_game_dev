@@ -20,28 +20,28 @@ class InspirasiRemoteDataSourceImpl implements InspirasiRemoteDataSource {
         id: '1',
         title: "The 'Grup 7' Creator Still Doesn't How",
         author: 'Person',
-        imageAsset: 'assets/images/placeholder_1.png', // Placeholder
+        imageAsset: 'assets/images/inspirasi_placeholder.png',
         timestamp: '10m',
       ),
       const InspirasiModel(
         id: '2',
         title: "The 'Grup 7' Creator Still Doesn't How",
         author: 'Person',
-        imageAsset: 'assets/images/placeholder_2.png',
+        imageAsset: 'assets/images/view_post_placeholder.png',
         timestamp: '10m',
       ),
       const InspirasiModel(
         id: '3',
         title: "The 'Grup 7' Creator Still Doesn't How",
         author: 'Person',
-        imageAsset: 'assets/images/placeholder_3.png',
+        imageAsset: 'assets/images/forum_placeholder.png',
         timestamp: '10m',
       ),
       const InspirasiModel(
         id: '4',
         title: "The 'Grup 7' Creator Still Doesn't How",
         author: 'Person',
-        imageAsset: 'assets/images/placeholder_4.png',
+        imageAsset: 'assets/images/tutorial_placeholder.png',
         timestamp: '10m',
       ),
     ];
