@@ -15,4 +15,15 @@ abstract class AuthRepository {
     required String email,
     required String password,
   });
+
+  // Kontrak fungsi Forgot Password
+  Future<Either<Failure, void>> forgotPassword({
+    required String email,
+  });
+
+  // Kontrak fungsi Verify Email
+  Future<Either<Failure, void>> verifyEmail({
+    required String email,
+    required String code,
+  });
 }

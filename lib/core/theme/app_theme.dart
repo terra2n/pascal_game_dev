@@ -35,7 +35,7 @@ class AppTheme {
       // Style Input Field
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white.withOpacity(0.9), // Agak transparan agar menyatu
+        fillColor: Colors.white.withValues(alpha: 0.9), // Agak transparan agar menyatu
         hintStyle: TextStyle(color: Colors.grey[600]),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

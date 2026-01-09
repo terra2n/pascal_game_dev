@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Standard for social icons if available, else Material
+import '../../../../core/constants/route_paths.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/primary_button.dart';
-import '../../../../core/widgets/social_button.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
+import '../widgets/auth_field.dart';
+import '../widgets/auth_header.dart';
 import '../widgets/gradient_scaffold.dart';
+import '../widgets/social_login_section.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,7 +23,6 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
   @override
@@ -42,18 +43,8 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
           child: Column(
             children: [
-              // Header Title (Pascal Game Development ? - From image 1, not strictly requested but good branding)
-              // The user request images show "Pascal Game Development" text at top.
-              const Text(
-                'Pascal Game Development',
-                style: TextStyle(
-                  fontFamily: 'Serif', // Placeholder for the gold font
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFFFD700), // Gold
-                  shadows: [Shadow(color: Colors.black45, offset: Offset(1,1), blurRadius: 2)],
-                ),
-              ),
+              // 1. Header Widget
+              const AuthHeader(),
               const SizedBox(height: 24),
 
               // White Card Container
@@ -65,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 5),
                     ),
@@ -96,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(color: Colors.grey[600]),
                           ),
                           GestureDetector(
-                            onTap: () => context.push('/register'),
+                            onTap: () => context.push(RoutePaths.register),
                             child: const Text(
                               "Sign Up",
                               style: TextStyle(
@@ -109,29 +100,20 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 32),
 
-                      // Input Email
-                      _buildLabel('Email'),
-                      const SizedBox(height: 8),
-                      _buildTextField(
+                      // 2. AuthField (Email)
+                      AuthField(
+                        label: 'Email',
+                        hintText: 'Loisbecket@gmail.com',
                         controller: _emailController,
-                        hint: 'Loisbecket@gmail.com',
-                        icon: null,
                       ),
                       const SizedBox(height: 16),
 
-                      // Input Password
-                      _buildLabel('Password'),
-                      const SizedBox(height: 8),
-                      _buildTextField(
+                      // 3. AuthField (Password)
+                      AuthField(
+                        label: 'Password',
+                        hintText: '*******',
                         controller: _passwordController,
-                        hint: '*******',
                         isPassword: true,
-                        isObscure: !_isPasswordVisible,
-                        onVisibilityToggle: () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
-                        },
                       ),
                       const SizedBox(height: 16),
 
@@ -160,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                           const Spacer(),
                           GestureDetector(
                             onTap: () {
-                              // Forgot Password
+                              context.push(RoutePaths.forgotPassword);
                             },
                             child: const Text(
                               "Forgot Password ?",
@@ -181,67 +163,33 @@ class _LoginPageState extends State<LoginPage> {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
                            } else if (state is AuthSuccess) {
                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login Success")));
+                             context.go(RoutePaths.home);
                            }
                         },
                         builder: (context, state) {
-                          return SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: ElevatedButton(
-                              onPressed: state is AuthLoading ? null : () {
-                                if (_formKey.currentState!.validate()) {
-                                  context.read<AuthBloc>().add(
-                                    LoginRequested(
-                                      email: _emailController.text,
-                                      password: _passwordController.text
-                                    )
-                                  );
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF2F65E3), // Bright Blue
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                elevation: 0,
-                              ),
-                              child: state is AuthLoading 
-                                ? const CircularProgressIndicator(color: Colors.white)
-                                : const Text(
-                                    'Log In',
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-                                  ),
-                            ),
+                          return PrimaryButton(
+                            text: 'Log In',
+                            isLoading: state is AuthLoading,
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<AuthBloc>().add(
+                                  LoginRequested(
+                                    email: _emailController.text,
+                                    password: _passwordController.text
+                                  )
+                                );
+                              }
+                            },
                           );
                         },
                       ),
 
                       const SizedBox(height: 24),
 
-                      // "Or" Divider
-                      Row(
-                        children: [
-                          Expanded(child: Divider(color: Colors.grey[300])),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text("Or", style: TextStyle(color: Colors.grey[500])),
-                          ),
-                          Expanded(child: Divider(color: Colors.grey[300])),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Social Buttons
-                      SocialButton(
-                        text: "Continue with Google",
-                        icon: FontAwesomeIcons.google,
-                        iconColor: Colors.red, // Google Red
-                        onPressed: () {},
-                      ),
-                      const SizedBox(height: 12),
-                      SocialButton(
-                        text: "Continue with Facebook",
-                        icon: FontAwesomeIcons.facebookF,
-                        iconColor: const Color(0xFF1877F2), // FB Blue
-                        onPressed: () {},
+                      // 4. Social Login Section
+                      SocialLoginSection(
+                        onGooglePressed: () {},
+                        onFacebookPressed: () {},
                       ),
                     ],
                   ),
@@ -251,63 +199,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildLabel(String text) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.grey[600],
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hint,
-    IconData? icon,
-    bool isPassword = false,
-    bool isObscure = false,
-    VoidCallback? onVisibilityToggle,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: isObscure,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey[400]),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade300),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade300),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary),
-        ),
-        suffixIcon: isPassword
-            ? IconButton(
-                icon: Icon(
-                  isObscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                  color: Colors.grey,
-                ),
-                onPressed: onVisibilityToggle,
-              )
-            : null,
-      ),
-      validator: (val) => val!.isEmpty ? 'Required' : null,
     );
   }
 }

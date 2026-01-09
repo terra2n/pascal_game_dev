@@ -13,6 +13,10 @@ class AppColors {
   static const Color primary = Color(0xFF577BC1); 
   static const Color secondary = Color(0xFF1A2B87);
   
+  // Specific Home Design Colors
+  static const Color homeBackground = Color(0xFF000957); // Dark Blue
+  static const Color accentYellow = Color(0xFFEBE645); // Yellow
+  
   // Background Colors
   static const Color surface = Colors.white; 
   

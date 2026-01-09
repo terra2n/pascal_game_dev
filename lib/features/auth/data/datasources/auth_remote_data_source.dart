@@ -3,6 +3,8 @@ import '../models/user_model.dart';
 abstract class AuthRemoteDataSource {
   Future<UserModel> login(String email, String password);
   Future<UserModel> register(String username, String email, String password);
+  Future<void> forgotPassword(String email);
+  Future<void> verifyEmail(String email, String code);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -39,6 +41,24 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       username: username,
       token: 'mock_jwt_token_register_123',
     );
+  }
+
+  @override
+  Future<void> forgotPassword(String email) async {
+    await Future.delayed(const Duration(seconds: 2));
+    // Simulate Success
+  }
+
+  @override
+  Future<void> verifyEmail(String email, String code) async {
+    await Future.delayed(const Duration(seconds: 2));
+    
+    // Simulate Check Code
+    if (code == "1234") {
+      // Success
+    } else {
+      throw Exception("Invalid Verification Code");
+    }
   }
 }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/constants/route_paths.dart';
 import '../widgets/gradient_scaffold.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _WelcomePageState extends State<WelcomePage> {
     Timer(const Duration(seconds: 2), () {
       if (mounted) {
         // Gunakan go() agar tidak bisa back ke splash
-        context.go('/login');
+        context.go(RoutePaths.login);
       }
     });
   }
